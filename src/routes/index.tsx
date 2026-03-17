@@ -1,19 +1,91 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
+import { Upload } from "lucide-react";
+import * as React from "react";
+import { toast } from "sonner";
 
-export const Route = createFileRoute("/")({ component: App })
+import { FileHandlerItem } from "@/components/file-handler";
+import { FileUpload, FileUploadDropzone, FileUploadTrigger } from "../components/ui/file-upload";
+
+export const Route = createFileRoute("/")({ component: App, ssr: false });
+
+type FileItem = {
+  id: string;
+  file: File;
+  url: string;
+  name: string;
+  size: number;
+};
 
 function App() {
+  const [items, setItems] = React.useState<FileItem[]>([]);
+
+  const onFileReject = React.useCallback((file: File, message: string) => {
+    toast(message, {
+      description: `"${file.name.length > 20 ? `${file.name.slice(0, 20)}...` : file.name}" has been rejected`,
+    });
+  }, []);
+
+  const onFilesChange = (files: File[]) => {
+    setItems((prev) => {
+      const existingNames = new Set(prev.map((f) => f.name + f.size));
+
+      const next = files
+        .filter((f) => !existingNames.has(f.name + f.size))
+        .map((file) => ({
+          id: crypto.randomUUID(),
+          file,
+          url: URL.createObjectURL(file),
+          name: file.name,
+          size: file.size,
+        }));
+
+      return [...prev, ...next];
+    });
+  };
+
+  const removeFile = (id: string) => {
+    setItems((prev) => {
+      const item = prev.find((f) => f.id === id);
+      if (item) URL.revokeObjectURL(item.url);
+      return prev.filter((f) => f.id !== id);
+    });
+  };
+
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
+    <div className="flex flex-col gap-3 min-h-svh p-6 items-center justify-center">
+      <FileUpload
+        maxSize={5 * 1024 * 1024}
+        className="w-full max-w-md"
+        value={items.map((i) => i.file)}
+        onValueChange={onFilesChange}
+        onFileReject={onFileReject}
+        multiple
+        accept="image/*"
+      >
+        <FileUploadDropzone>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <div className="flex items-center justify-center rounded-full border p-2.5">
+              <Upload className="size-6 text-muted-foreground" />
+            </div>
+            <p className="text-sm font-medium">Drag & drop images here</p>
+            <p className="text-xs text-muted-foreground">Or click to browse (5mb each)</p>
+          </div>
+          <FileUploadTrigger asChild>
+            <Button variant="outline" size="sm" className="mt-2 w-fit">
+              Browse files
+            </Button>
+          </FileUploadTrigger>
+        </FileUploadDropzone>
+      </FileUpload>
+
+      {items.length > 0 ? (
+        <div className="flex flex-col gap-2 w-full max-w-xl">
+          {items.map((file) => (
+            <FileHandlerItem key={file.id} file={file} removeFile={removeFile} />
+          ))}
         </div>
-      </div>
+      ) : null}
     </div>
-  )
+  );
 }
