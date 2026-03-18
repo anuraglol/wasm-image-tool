@@ -5,7 +5,7 @@ export const Nav = () => {
   const uri = pathname === "/history" ? "/" : "/history";
 
   return (
-    <div className="flex flex-col absolute top-12 w-full text-center">
+    <div className="flex flex-col mt-6 w-full text-center">
       <p className="text-xl font-medium">kanji</p>
 
       <Link

@@ -53,7 +53,7 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-svh w-full flex-col items-center justify-center gap-3 px-4 py-6 sm:p-6">
+    <div className="flex h-full m-auto w-full flex-col items-center justify-center gap-3 px-4 py-6 sm:p-6">
       <p className="max-w-xl text-center text-sm text-muted-foreground sm:text-[15px] xl:max-w-2xl">
         hi! this is a simple local-only image conversion tool built using wasm. it uses{" "}
         <span className="italic">imagemagick</span> under the hood, along with{" "}
