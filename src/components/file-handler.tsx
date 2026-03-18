@@ -16,7 +16,6 @@ import { downloadFile, formatFileName, IMAGE_TYPES } from "@/lib/utils";
 
 import { filesStore } from "@/db-collections";
 import { Button } from "./ui/button";
-import { useRouteContext } from "@tanstack/react-router";
 
 type FileHandlerItemData = {
   id: string;
@@ -117,64 +116,75 @@ export function FileHandlerItem({
   });
 
   return (
-    <div className="w-full p-3 rounded-md border-border border flex justify-between items-center">
-      <div className="flex items-center gap-3">
-        <img
-          src={data?.url ?? file.url}
-          alt={file.name}
-          className="size-36 rounded-xs object-cover"
-        />
+    <div className="w-full rounded-md border border-border p-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <img
+            src={data?.url ?? file.url}
+            alt={file.name}
+            className="h-20 w-20 shrink-0 rounded-xs object-cover sm:h-28 sm:w-28"
+          />
 
-        <div className="text-[13px] font-medium flex flex-col gap-2">
-          {formatFileName(file.name)}
-          <p className="text-[11px] text-muted-foreground">{formattedSize(file.size)}</p>
+          <div className="min-w-0 flex-1 text-[13px] font-medium">
+            <div className="min-w-0 break-words [overflow-wrap:anywhere]">
+              {formatFileName(file.name)}
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground">{formattedSize(file.size)}</p>
 
-          <div className="w-full flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <Select
-                value={selectedType}
-                onValueChange={(value) => setSelectedType(value as IMAGE_TYPES)}
-              >
-                <SelectTrigger className="w-24">{selectedType.toUpperCase()}</SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {IMAGE_TYPES.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type.toUpperCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="mt-3 flex flex-col gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Select
+                  value={selectedType}
+                  onValueChange={(value) => setSelectedType(value as IMAGE_TYPES)}
+                >
+                  <SelectTrigger className="w-full sm:w-24">
+                    {selectedType.toUpperCase()}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {IMAGE_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type.toUpperCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  className="w-full sm:w-28"
+                  onClick={() => mutate()}
+                  disabled={isPending}
+                  variant="outline"
+                >
+                  <RotateCw className="size-4" data-icon="inline-start" />
+                  Convert
+                </Button>
+              </div>
 
               <Button
-                className="w-28"
-                onClick={() => mutate()}
-                disabled={isPending}
+                className="w-full"
+                onClick={() => data && downloadHandler(data.blob)}
+                disabled={isDownloading || !data}
                 variant="outline"
               >
-                <RotateCw className="size-4" data-icon="inline-start" />
-                Convert
+                <DownloadIcon className="size-4" data-icon="inline-start" />
+                Download
               </Button>
             </div>
-
-            <Button
-              className="w-full"
-              onClick={() => data && downloadHandler(data.blob)}
-              disabled={isDownloading || !data}
-              variant="outline"
-            >
-              <DownloadIcon className="size-4" data-icon="inline-start" />
-              Download
-            </Button>
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="size-7" onClick={() => removeFile(file.id)}>
-          <X className="size-4" />
-        </Button>
+        <div className="flex items-center justify-end">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={() => removeFile(file.id)}
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

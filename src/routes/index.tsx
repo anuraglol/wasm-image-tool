@@ -53,15 +53,15 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col gap-3 min-h-svh p-6 items-center justify-center">
+    <div className="flex min-h-svh w-full flex-col items-center justify-center gap-3 px-4 py-6 sm:p-6">
       <Link
         to="/history"
         className="underline text-muted-foreground hover:text-white transition-all duration-75"
       >
         /history
       </Link>
-      <p className="text-muted-foreground text-[15px] max-w-xl text-center">
-        this is a simple local-only image conversion tool built using wasm. it uses{" "}
+      <p className="max-w-xl text-center text-sm text-muted-foreground sm:text-[15px] xl:max-w-2xl">
+        hi! this is a simple local-only image conversion tool built using wasm. it uses{" "}
         <span className="italic">imagemagick</span> under the hood, along with{" "}
         <span className="italic">indexed-db</span> for synced local state management. <br />
         upload files in the below area to proceed.
@@ -86,7 +86,7 @@ function App() {
             </p>
           </div>
           <FileUploadTrigger asChild>
-            <Button variant="outline" size="sm" className="mt-2 w-fit">
+            <Button variant="outline" size="sm" className="mt-2 w-full sm:w-fit">
               Browse files
             </Button>
           </FileUploadTrigger>
@@ -94,7 +94,7 @@ function App() {
       </FileUpload>
 
       {items.length > 0 ? (
-        <div className="flex flex-col gap-2 w-full max-w-xl">
+        <div className="flex w-full max-w-lg flex-col gap-2 2xl:max-w-xl">
           {items.map((file) => (
             <FileHandlerItem key={file.id} file={file} removeFile={removeFile} />
           ))}

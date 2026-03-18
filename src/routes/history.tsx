@@ -14,7 +14,7 @@ function RouteComponent() {
   });
 
   return (
-    <div className="flex flex-col gap-3 min-h-svh p-6 items-center justify-center">
+    <div className="flex min-h-svh w-full flex-col items-center justify-center gap-3 px-4 py-6 sm:p-6">
       <Link
         to="/"
         className="underline text-muted-foreground hover:text-white transition-all duration-75"
@@ -25,7 +25,7 @@ function RouteComponent() {
       {isLoading ? (
         <p className="text-muted-foreground">Loading...</p>
       ) : data && data.length > 0 ? (
-        <div className="flex flex-col gap-2 w-full max-w-xl">
+        <div className="flex w-full max-w-lg flex-col gap-2 xl:max-w-xl">
           {data.map((file) => (
             <FileItem key={file.id} file={file} url={URL.createObjectURL(file.data)} />
           ))}
