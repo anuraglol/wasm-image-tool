@@ -5,7 +5,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/history")({
   component: RouteComponent,
-  ssr: false,
 });
 
 function RouteComponent() {

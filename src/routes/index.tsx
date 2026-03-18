@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { FileHandlerItem } from "@/components/file-handler";
 import { FileUpload, FileUploadDropzone, FileUploadTrigger } from "../components/ui/file-upload";
 
-export const Route = createFileRoute("/")({ component: App, ssr: false });
+export const Route = createFileRoute("/")({ component: App });
 
 type FileItem = {
   id: string;
