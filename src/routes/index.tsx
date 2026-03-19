@@ -54,7 +54,7 @@ function App() {
 
   return (
     <>
-      <p className="max-w-xl text-center text-sm text-muted-foreground sm:text-base xl:max-w-2xl">
+      <p className="max-w-xl text-center text-sm text-muted-foreground sm:text- xl:max-w-2xl">
         hi! this is a simple local-only image conversion tool built using wasm. it uses{" "}
         <span className="italic">imagemagick</span> under the hood, along with{" "}
         <span className="italic">indexed-db</span> for synced local state management. <br />

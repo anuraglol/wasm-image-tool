@@ -99,7 +99,7 @@ export function FileHandlerItem({
       }
 
       const srcBytes = new Uint8Array(await file.file.arrayBuffer());
-      const outBytes = await convertImage(srcBytes, selectedType);
+      const outBytes = await convertImage(srcBytes, srcType, selectedType);
       const outView = new Uint8Array(outBytes);
       const outBlob = new Blob([outView], { type: outputMime });
 
@@ -175,7 +175,7 @@ export function FileHandlerItem({
                   <SelectContent>
                     <SelectGroup>
                       {IMAGE_TYPES.map((type) => {
-                        const disabled = !allowedOutputs.includes(type);
+                        const disabled = !canWrite(type);
                         const badge = getFormatBadge(type);
 
                         return (
